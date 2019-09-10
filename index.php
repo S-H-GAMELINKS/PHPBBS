@@ -8,5 +8,36 @@
     </head>
     <body>
         <h1>Hello PHP/BBS!</h1>
+
+        <button id="button">get</button>
+
+        <h1 id="hello"></h1>
+
+        <script type="text/javascript">
+
+            let hello = document.getElementById('hello');
+
+
+            let button = document.getElementById('button');
+
+
+            button.onclick = function() {
+                let eventSource = new EventSource('php/server.php');
+
+                eventSource.onopen = function() {
+                    console.log("Connection to server opened.");
+                };
+
+                eventSource.onmessage = function(e) {
+                    hello.innerText = JSON.parse(e.data).text;
+                    eventSource.close();
+                };
+
+                eventSource.onerror = function(e) {
+                    console.log("EventSource failed.");
+                    eventSource.close();
+                };
+            }
+        </script>
     </body>
 </html>
