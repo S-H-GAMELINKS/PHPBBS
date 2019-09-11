@@ -1,14 +1,15 @@
 <?php
-    header('Content-Type: text/event-stream');
-    header('Cache-Control: no-store');
 
-while (true) {
+    $all_text = file_get_contents('text.json');
 
-    printf("data: %s\n\n", json_encode([
-        'text' => 'Hello World',
-    ]));
+    $array = json_decode($all_text);
 
-    ob_end_flush();
-    flush();
-    sleep(1);
-}
+    $array[] = [
+        'No' => count($array),
+        'Content' => $_REQUEST['post']
+    ];
+
+    file_put_contents('text.json', json_encode($array));
+
+    header('Location: /', true, 301);
+?>
